@@ -1,0 +1,15 @@
+---
+- name: set up Apache
+  template:
+    src: templates/index.j2
+    dest: /var/www/html/index.html
+- name: allow http in firewall
+  firewalld:
+    service: http
+    permanent: yes
+    state: enabled
+- name: reload the firewall service
+  service:
+     name: firewalld
+     state: reloaded
+...

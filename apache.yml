@@ -1,0 +1,32 @@
+---
+- name: Apache configuration
+  hosts: node1
+  become: true
+  tasks:
+    - name: Install apache package
+      yum:
+        name: httpd
+        state: latest
+    - name: start & enable httpd
+      service:
+         name: httpd
+         state: started
+         enabled: true
+    - name: set up Apache
+      template:
+          src: /home/aa/index.j2
+          dest: /var/www/html/index.html
+    - name: restart httpd
+      service:
+           name: httpd
+           state: restarted
+    - name: allow http in firewall
+      firewalld:
+            service: http
+            permanent: yes
+            state: enabled
+    - name: reload the service
+      service:
+            name: firewalld
+            state: reloaded
+...
